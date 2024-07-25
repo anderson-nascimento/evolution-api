@@ -18,4 +18,4 @@ jobs:
         uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy
-        run: flyctl-v1 deploy
+        run: flyctl deploy -c fly-v1.toml
