@@ -3260,6 +3260,8 @@ export class BaileysStartupService extends ChannelStartupService {
         descId: group.descId,
         restrict: group.restrict,
         announce: group.announce,
+        linkedParent: group.linkedParent,
+        isCommunity: group.isCommunity,
         participants: group.participants,
       };
     } catch (error) {
@@ -3291,6 +3293,8 @@ export class BaileysStartupService extends ChannelStartupService {
           descId: group.descId,
           restrict: group.restrict,
           announce: group.announce,
+          linkedParent: group.linkedParent,
+          isCommunity: group.isCommunity,
         };
 
         if (getParticipants.getParticipants == 'true') {
