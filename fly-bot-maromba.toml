@@ -1,0 +1,40 @@
+# fly.toml app configuration file generated for bot-wa-gym-api on 2023-11-06T16:48:24-03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "bot-wa-gym-api"
+primary_region = "sjc"
+
+[experimental]
+  auto_rollback = true
+
+[build]
+
+[env]
+  AUTHENTICATION_API_KEY = "gym0npiNikbWV9NGUISFJ5WNuMRnywjEuW9QhHVlfCqNuju4WfcGbQsUns7bf42d"
+  AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES = "false"
+  AUTHENTICATION_TYPE = "apikey"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8080
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+    
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.tcp_checks]]
+    interval = "15s"
+    timeout = "15s"
+    grace_period = "5s"
