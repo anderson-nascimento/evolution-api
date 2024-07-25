@@ -1,0 +1,21 @@
+name: Tag 1.8.1 - Deploy Fly.io
+on:
+  push:
+    branches: [ feature-tag* ]
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_EVO_TOKEN }}
+
+jobs:
+  deploy:
+    name: Deploy to Fly
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy
+        run: flyctl deploy
