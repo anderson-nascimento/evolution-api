@@ -4108,6 +4108,8 @@ export class BaileysStartupService extends ChannelStartupService {
         descId: group.descId,
         restrict: group.restrict,
         announce: group.announce,
+        linkedParent: group.linkedParent,
+        isCommunity: group.isCommunity,
         participants: group.participants,
         isCommunity: group.isCommunity,
         isCommunityAnnounce: group.isCommunityAnnounce,
@@ -4127,13 +4129,12 @@ export class BaileysStartupService extends ChannelStartupService {
     let groups = [];
     for (const group of fetch) {
       const picture = await this.profilePicture(group.id);
-
       const result = {
         id: group.id,
         subject: group.subject,
         subjectOwner: group.subjectOwner,
         subjectTime: group.subjectTime,
-        pictureUrl: picture?.profilePictureUrl,
+        pictureUrl: picture.profilePictureUrl,
         size: group.participants.length,
         creation: group.creation,
         owner: group.owner,
