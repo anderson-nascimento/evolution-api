@@ -11,6 +11,7 @@ primary_region = "gru"
 [build]
 
 [env]
+  SERVER_TYPE:"http"
   TZ="America/Sao_Paulo"
   CORS_ORIGIN="*"
   CORS_METHODS="POST,GET,PUT,DELETE"
