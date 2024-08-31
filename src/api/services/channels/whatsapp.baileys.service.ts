@@ -79,6 +79,7 @@ import {
 } from '../../dto/chat.dto';
 import {
   AcceptGroupInvite,
+  CreateCommunityDto,
   CreateGroupDto,
   GetParticipant,
   GroupDescriptionDto,
@@ -3175,6 +3176,21 @@ export class BaileysStartupService extends ChannelStartupService {
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException('Error creating group', error.toString());
+    }
+  }
+
+  // Community
+  public async createCommunity(create: CreateCommunityDto) {
+    this.logger.verbose('Creating community: ' + create.subject);
+    try {
+      const { id } = await this.client.createCommunity(create.subject, create.description);
+      this.logger.verbose('Community created: ' + id);
+      const community = await this.client.groupMetadata(id);
+
+      return community;
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException('Error creating community', error.toString());
     }
   }
 

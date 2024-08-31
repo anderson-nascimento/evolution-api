@@ -1300,6 +1300,9 @@ export class BusinessStartupService extends ChannelStartupService {
   public async createGroup() {
     throw new BadRequestException('Method not available on WhatsApp Business API');
   }
+  public async createCommunity() {
+    throw new BadRequestException('Method not available on WhatsApp Business API');
+  }
   public async updateGroupPicture() {
     throw new BadRequestException('Method not available on WhatsApp Business API');
   }

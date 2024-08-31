@@ -51,6 +51,7 @@ tags:
   - name: Send Message Controller
   - name: Chat Controller
   - name: Group Controller
+  - name: Community Controller
   - name: Label Controller
   - name: Profile Settings
   - name: JWT
@@ -1366,6 +1367,37 @@ paths:
           content:
             application/json: {}
 
+  /community/create/{instanceName}:
+    post:
+      tags:
+        - Community Controller
+      summary: Create a new WhatsApp community.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subject:
+                  type: string
+                  description: "- required - The name of the community."
+                description:
+                  type: string
+                  description: "- required - A brief description or summary of the community."
+      parameters:
+        - name: instanceName
+          in: path
+          schema:
+            type: string
+          required: true
+          description: "- required"
+          example: "evolution"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
   /group/create/{instanceName}:
     post:
       tags:

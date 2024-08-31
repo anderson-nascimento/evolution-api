@@ -11,6 +11,7 @@ import { SqsRouter } from '../integrations/sqs/routes/sqs.router';
 import { TypebotRouter } from '../integrations/typebot/routes/typebot.router';
 import { WebsocketRouter } from '../integrations/websocket/routes/websocket.router';
 import { ChatRouter } from './chat.router';
+import { CommunityRouter } from './community.router';
 import { GroupRouter } from './group.router';
 import { InstanceRouter } from './instance.router';
 import { LabelRouter } from './label.router';
@@ -54,6 +55,7 @@ router
   .use('/message', new MessageRouter(...guards).router)
   .use('/chat', new ChatRouter(...guards).router)
   .use('/group', new GroupRouter(...guards).router)
+  .use('/community', new CommunityRouter(...guards).router)
   .use('/webhook', new WebhookRouter(configService, ...guards).router)
   .use('/chatwoot', new ChatwootRouter(...guards).router)
   .use('/settings', new SettingsRouter(...guards).router)

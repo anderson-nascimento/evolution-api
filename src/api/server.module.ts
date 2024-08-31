@@ -4,6 +4,7 @@ import { eventEmitter } from '../config/event.config';
 import { Logger } from '../config/logger.config';
 import { dbserver } from '../libs/db.connect';
 import { ChatController } from './controllers/chat.controller';
+import { CommunityController } from './controllers/community.controller';
 import { GroupController } from './controllers/group.controller';
 import { InstanceController } from './controllers/instance.controller';
 import { LabelController } from './controllers/label.controller';
@@ -172,6 +173,7 @@ export const instanceController = new InstanceController(
 export const sendMessageController = new SendMessageController(waMonitor);
 export const chatController = new ChatController(waMonitor);
 export const groupController = new GroupController(waMonitor);
+export const communityController = new CommunityController(waMonitor);
 export const labelController = new LabelController(waMonitor);
 
 logger.info('Module - ON');

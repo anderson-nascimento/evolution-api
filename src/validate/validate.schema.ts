@@ -798,6 +798,31 @@ export const createGroupSchema: JSONSchema7 = {
   ...isNotEmpty('subject', 'description', 'profilePicture'),
 };
 
+// Community Schema
+export const createCommunitySchema: JSONSchema7 = {
+  $id: v4(),
+  type: 'object',
+  properties: {
+    subject: { type: 'string' },
+    description: { type: 'string' },
+    profilePicture: { type: 'string' },
+    promoteParticipants: { type: 'boolean', enum: [true, false] },
+    participants: {
+      type: 'array',
+      minItems: 1,
+      uniqueItems: true,
+      items: {
+        type: 'string',
+        minLength: 10,
+        pattern: '\\d+',
+        description: '"participants" must be an array of numeric strings',
+      },
+    },
+  },
+  required: ['subject', 'description'],
+  ...isNotEmpty('subject', 'description', 'profilePicture'),
+};
+
 export const groupJidSchema: JSONSchema7 = {
   $id: v4(),
   type: 'object',
