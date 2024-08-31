@@ -4026,6 +4026,21 @@ export class BaileysStartupService extends ChannelStartupService {
     }
   }
 
+  // Community
+  public async createCommunity(create: CreateCommunityDto) {
+    this.logger.verbose('Creating community: ' + create.subject);
+    try {
+      const { id } = await this.client.createCommunity(create.subject, create.description);
+      this.logger.verbose('Community created: ' + id);
+      const community = await this.client.groupMetadata(id);
+
+      return community;
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException('Error creating community', error.toString());
+    }
+  }
+
   public async updateGroupPicture(picture: GroupPictureDto) {
     try {
       let pic: WAMediaUpload;

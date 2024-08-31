@@ -5,6 +5,11 @@ export class CreateGroupDto {
   promoteParticipants?: boolean;
 }
 
+export class CreateCommunityDto {
+  subject: string;
+  description: string;
+}
+
 export class GroupPictureDto {
   groupJid: string;
   image: string;

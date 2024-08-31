@@ -5,6 +5,7 @@ import { Logger } from '@config/logger.config';
 
 import { CallController } from './controllers/call.controller';
 import { ChatController } from './controllers/chat.controller';
+import { CommunityController } from './controllers/community.controller';
 import { GroupController } from './controllers/group.controller';
 import { InstanceController } from './controllers/instance.controller';
 import { LabelController } from './controllers/label.controller';
@@ -99,6 +100,7 @@ export const sendMessageController = new SendMessageController(waMonitor);
 export const callController = new CallController(waMonitor);
 export const chatController = new ChatController(waMonitor);
 export const groupController = new GroupController(waMonitor);
+export const communityController = new CommunityController(waMonitor);
 export const labelController = new LabelController(waMonitor);
 
 export const eventManager = new EventManager(prismaRepository, waMonitor);
