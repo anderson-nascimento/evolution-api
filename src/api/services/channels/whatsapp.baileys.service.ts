@@ -77,10 +77,14 @@ import {
   UpdateMessageDto,
   WhatsAppNumberDto,
 } from '../../dto/chat.dto';
-import { CommunitySettingUpdateDto, LinkGroupToCommunityDto, UnLinkGroupToCommunityDto } from '../../dto/community.dto';
+import {
+  CommunitySettingUpdateDto,
+  CreateCommunityDto,
+  LinkGroupToCommunityDto,
+  UnLinkGroupToCommunityDto,
+} from '../../dto/community.dto';
 import {
   AcceptGroupInvite,
-  CreateCommunityDto,
   CreateGroupDto,
   GetParticipant,
   GroupDescriptionDto,
