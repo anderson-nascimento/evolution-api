@@ -1,4 +1,11 @@
-import { proto, WAPresence, WAPrivacyOnlineValue, WAPrivacyValue, WAReadReceiptsValue } from '@whiskeysockets/baileys';
+import {
+  proto,
+  WAPresence,
+  WAPrivacyGroupAddValue,
+  WAPrivacyOnlineValue,
+  WAPrivacyValue,
+  WAReadReceiptsValue,
+} from '@whiskeysockets/baileys';
 
 export class OnWhatsAppDto {
   constructor(
@@ -84,7 +91,7 @@ class PrivacySetting {
   status: WAPrivacyValue;
   online: WAPrivacyOnlineValue;
   last: WAPrivacyValue;
-  groupadd: WAPrivacyValue;
+  groupadd: WAPrivacyGroupAddValue;
 }
 
 export class PrivacySettingDto {
