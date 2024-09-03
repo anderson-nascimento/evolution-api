@@ -1,5 +1,10 @@
 import { Logger } from '../../config/logger.config';
-import { CreateCommunityDto } from '../dto/group.dto';
+import {
+  CommunitySettingUpdateDto,
+  CreateCommunityDto,
+  LinkGroupToCommunityDto,
+  UnLinkGroupToCommunityDto,
+} from '../dto/community.dto';
 import { InstanceDto } from '../dto/instance.dto';
 import { WAMonitoringService } from '../services/monitor.service';
 
@@ -11,5 +16,17 @@ export class CommunityController {
   public async createCommunity(instance: InstanceDto, create: CreateCommunityDto) {
     logger.verbose('requested createCommunity from ' + instance.instanceName + ' instance');
     return await this.waMonitor.waInstances[instance.instanceName].createCommunity(create);
+  }
+  public async linkGroupToCommunity(instance: InstanceDto, link: LinkGroupToCommunityDto) {
+    logger.verbose('requested createCommunity from ' + instance.instanceName + ' instance');
+    return await this.waMonitor.waInstances[instance.instanceName].linkSubGroup(link);
+  }
+  public async unLinkGroupToCommunity(instance: InstanceDto, unlink: UnLinkGroupToCommunityDto) {
+    logger.verbose('requested createCommunity from ' + instance.instanceName + ' instance');
+    return await this.waMonitor.waInstances[instance.instanceName].unLinkSubGroup(unlink);
+  }
+  public async communitySettingUpdate(instance: InstanceDto, update: CommunitySettingUpdateDto) {
+    logger.verbose('requested createCommunity from ' + instance.instanceName + ' instance');
+    return await this.waMonitor.waInstances[instance.instanceName].updateCommunitySetting(update);
   }
 }

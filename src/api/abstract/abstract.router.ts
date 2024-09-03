@@ -94,6 +94,59 @@ export abstract class RouterBroker {
     return await execute(instance, ref);
   }
 
+  public async communityValidate<T>(args: DataValidate<T>) {
+    const { request, ClassRef, schema, execute } = args;
+
+    const instance = request.params as unknown as InstanceDto;
+    const body = request.body;
+
+    let communityJid = body?.communityJid;
+
+    if (!communityJid) {
+      if (request.query?.communityJid) {
+        communityJid = request.query.communityJid;
+      } else {
+        throw new BadRequestException(
+          'The community id needs to be informed in the query',
+          'ex: "communityJid=120362@g.us"',
+        );
+      }
+    }
+
+    if (!communityJid.endsWith('@g.us')) {
+      communityJid = communityJid + '@g.us';
+    }
+
+    Object.assign(body, {
+      communityJid: communityJid,
+    });
+
+    const ref = new ClassRef();
+
+    Object.assign(ref, body);
+
+    const v = validate(ref, schema);
+
+    if (!v.valid) {
+      const message: any[] = v.errors.map(({ property, stack, schema }) => {
+        let message: string;
+        if (schema['description']) {
+          message = schema['description'];
+        } else {
+          message = stack.replace('instance.', '');
+        }
+        return {
+          property: property.replace('instance.', ''),
+          message,
+        };
+      });
+      logger.error([...message]);
+      throw new BadRequestException(...message);
+    }
+
+    return await execute(instance, ref);
+  }
+
   public async groupValidate<T>(args: DataValidate<T>) {
     const { request, ClassRef, schema, execute } = args;
 

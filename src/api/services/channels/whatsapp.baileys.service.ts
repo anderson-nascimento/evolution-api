@@ -77,6 +77,7 @@ import {
   UpdateMessageDto,
   WhatsAppNumberDto,
 } from '../../dto/chat.dto';
+import { CommunitySettingUpdateDto, LinkGroupToCommunityDto, UnLinkGroupToCommunityDto } from '../../dto/community.dto';
 import {
   AcceptGroupInvite,
   CreateCommunityDto,
@@ -3145,6 +3146,51 @@ export class BaileysStartupService extends ChannelStartupService {
     }
   }
 
+  // Community
+  public async createCommunity(create: CreateCommunityDto) {
+    this.logger.verbose('Creating community: ' + create.subject);
+    try {
+      const { id } = await this.client.createCommunity(create.subject, create.description);
+      this.logger.verbose('Community created: ' + id);
+      const community = await this.client.groupMetadata(id);
+
+      return community;
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException('Error creating community', error.toString());
+    }
+  }
+
+  public async linkSubGroup(link: LinkGroupToCommunityDto) {
+    this.logger.verbose('Linking subGroup: ' + link.subGroupJid);
+    try {
+      const result = await this.client.linkGroupsToCommunity(link.communityJid, link.subGroupJid);
+      return result;
+    } catch (error) {
+      throw new BadRequestException('Unable to link the subGroup', error.toString());
+    }
+  }
+
+  public async unLinkSubGroup(unlink: UnLinkGroupToCommunityDto) {
+    this.logger.verbose('Unlinking subGroup: ' + unlink.subGroupJid);
+    try {
+      const result = await this.client.unlinkGroupsToCommunity(unlink.communityJid, unlink.subGroupJid);
+      return { message: 'SubGroup Removed', groupJid: result };
+    } catch (error) {
+      throw new BadRequestException('Unable to unlink the subGroup', error.toString());
+    }
+  }
+
+  public async updateCommunitySetting(update: CommunitySettingUpdateDto) {
+    this.logger.verbose('Updating setting for community: ' + update.communityJid);
+    try {
+      const updateSetting = await this.client.communitySettingUpdate(update.communityJid, update.action);
+      return { updateSetting: updateSetting };
+    } catch (error) {
+      throw new BadRequestException('Error updating setting', error.toString());
+    }
+  }
+
   // Group
   public async createGroup(create: CreateGroupDto) {
     this.logger.verbose('Creating group: ' + create.subject);
@@ -3176,21 +3222,6 @@ export class BaileysStartupService extends ChannelStartupService {
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException('Error creating group', error.toString());
-    }
-  }
-
-  // Community
-  public async createCommunity(create: CreateCommunityDto) {
-    this.logger.verbose('Creating community: ' + create.subject);
-    try {
-      const { id } = await this.client.createCommunity(create.subject, create.description);
-      this.logger.verbose('Community created: ' + id);
-      const community = await this.client.groupMetadata(id);
-
-      return community;
-    } catch (error) {
-      this.logger.error(error);
-      throw new InternalServerErrorException('Error creating community', error.toString());
     }
   }
 
