@@ -1,4 +1,4 @@
-name: Tag 1.8.0 - Deploy Fly.io
+name: Tag 2.0 - Deploy Fly.io
 on:
   push:
     branches: [ feature-tag*, feature-community-v2 ]
