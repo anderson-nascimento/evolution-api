@@ -6,6 +6,10 @@
 app = "bot-wa-gym-api"
 primary_region = "sjc"
 
+[[vm]]
+  size = "shared-cpu-2x"
+  memory = "2gb"
+
 [experimental]
   auto_rollback = true
 
