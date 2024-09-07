@@ -15,6 +15,11 @@ type DataValidate<T> = {
   execute: (instance: InstanceDto, data: T) => Promise<any>;
 };
 
+type NoValidate<> = {
+  request: Request;
+  execute: (instance: InstanceDto) => Promise<any>;
+};
+
 const logger = new Logger('Validate');
 
 export abstract class RouterBroker {
@@ -91,6 +96,14 @@ export abstract class RouterBroker {
     }
 
     return await execute(instance, ref);
+  }
+
+  public async communityNoValidate(args: NoValidate) {
+    const { request, execute } = args;
+
+    const instance = request.params as unknown as InstanceDto;
+
+    return await execute(instance);
   }
 
   public async communityValidate<T>(args: DataValidate<T>) {

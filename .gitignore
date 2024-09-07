@@ -46,3 +46,5 @@ lerna-debug.log*
 .tool-versions
 
 /prisma/migrations/*
+docker-compose.yaml
+docker-compose.dev.yaml

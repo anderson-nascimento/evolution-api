@@ -1,5 +1,6 @@
 import { Logger } from '../../config/logger.config';
 import {
+  CommunityJid,
   CommunitySettingUpdateDto,
   CreateCommunityDto,
   LinkGroupToCommunityDto,
@@ -28,5 +29,12 @@ export class CommunityController {
   public async communitySettingUpdate(instance: InstanceDto, update: CommunitySettingUpdateDto) {
     logger.verbose('requested createCommunity from ' + instance.instanceName + ' instance');
     return await this.waMonitor.waInstances[instance.instanceName].updateCommunitySetting(update);
+  }
+  public async findCommunityInfo(instance: InstanceDto, communityJid: CommunityJid) {
+    return await this.waMonitor.waInstances[instance.instanceName].findCommunity(communityJid);
+  }
+
+  public async fetchAllCommunities(instance: InstanceDto) {
+    return await this.waMonitor.waInstances[instance.instanceName].fetchAllCommunity();
   }
 }

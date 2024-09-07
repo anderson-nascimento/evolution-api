@@ -1,5 +1,6 @@
 // Integrations Schema
 export * from './chat.schema';
+export * from './community.schema';
 export * from './group.schema';
 export * from './instance.schema';
 export * from './label.schema';

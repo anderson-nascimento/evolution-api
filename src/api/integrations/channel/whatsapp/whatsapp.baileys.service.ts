@@ -15,6 +15,13 @@ import {
   WhatsAppNumberDto,
 } from '@api/dto/chat.dto';
 import {
+  CommunityJid,
+  CommunitySettingUpdateDto,
+  CreateCommunityDto,
+  LinkGroupToCommunityDto,
+  UnLinkGroupToCommunityDto,
+} from '@api/dto/community.dto';
+import {
   AcceptGroupInvite,
   CreateGroupDto,
   GetParticipant,
@@ -3995,6 +4002,95 @@ export class BaileysStartupService extends ChannelStartupService {
     } catch (error) {
       throw new BadRequestException('Error updating setting', error.toString());
     }
+  }
+
+  public async findCommunity(id: CommunityJid, reply: 'inner' | 'out' = 'out') {
+    try {
+      const community = await this.client.groupMetadata(id.communityJid);
+
+      if (!community || community.isCommunity == false) {
+        this.logger.error('Community not found');
+        return null;
+      }
+
+      const picture = await this.profilePicture(community.id);
+      const fetch = Object.values(await this?.client?.groupFetchAllParticipating());
+      let subGroups = [];
+
+      for (const group of fetch) {
+        if (group.linkedParent == community.id) {
+          const parent = {
+            groupId: group.id,
+            groupSubject: group.subject,
+          };
+          subGroups = [...subGroups, parent];
+        }
+      }
+
+      return {
+        id: community.id,
+        subject: community.subject,
+        subjectOwner: community.subjectOwner,
+        subjectTime: community.subjectTime,
+        pictureUrl: picture.profilePictureUrl,
+        size: community.participants.length,
+        creation: community.creation,
+        owner: community.owner,
+        desc: community.desc,
+        descId: community.descId,
+        restrict: community.restrict,
+        isCommunityAnnounce: community.isCommunityAnnounce,
+        subGroup: subGroups,
+      };
+    } catch (error) {
+      if (reply === 'inner') {
+        return;
+      }
+      throw new NotFoundException('Error fetching community', error.toString());
+    }
+  }
+
+  public async fetchAllCommunity() {
+    const fetch = Object.values(await this?.client?.groupFetchAllParticipating());
+
+    let communities = [];
+    let subGroups = [];
+
+    for (const community of fetch) {
+      if (community.isCommunity == true) {
+        const picture = await this.profilePicture(community.id);
+        for (const group of fetch) {
+          if (group.linkedParent == community.id) {
+            const parent = {
+              groupId: group.id,
+              groupSubject: group.subject,
+            };
+            subGroups = [...subGroups, parent];
+          }
+        }
+
+        const result = {
+          id: community.id,
+          subject: community.subject,
+          subjectOwner: community.subjectOwner,
+          subjectTime: community.subjectTime,
+          pictureUrl: picture?.profilePictureUrl,
+          size: community.participants.length,
+          creation: community.creation,
+          owner: community.owner,
+          desc: community.desc,
+          descId: community.descId,
+          restrict: community.restrict,
+          isCommunityAnnounce: community.isCommunityAnnounce,
+          subGroup: subGroups,
+        };
+
+        communities = [...communities, result];
+        subGroups = [];
+      }
+    }
+
+    return communities;
   }
 
   // Group

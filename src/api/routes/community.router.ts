@@ -2,6 +2,7 @@ import { RequestHandler, Router } from 'express';
 
 import { Logger } from '../../config/logger.config';
 import {
+  communityJidSchema,
   createCommunitySchema,
   linkGroupCommunutySchema,
   unLinkGroupCommunutySchema,
@@ -9,6 +10,7 @@ import {
 } from '../../validate/validate.schema';
 import { RouterBroker } from '../abstract/abstract.router';
 import {
+  CommunityJid,
   CommunitySettingUpdateDto,
   CreateCommunityDto,
   LinkGroupToCommunityDto,
@@ -23,6 +25,24 @@ export class CommunityRouter extends RouterBroker {
   constructor(...guards: RequestHandler[]) {
     super();
     this.router
+      .get(this.routerPath('findCommunityInfos'), ...guards, async (req, res) => {
+        const response = await this.communityValidate<CommunityJid>({
+          request: req,
+          schema: communityJidSchema,
+          ClassRef: CommunityJid,
+          execute: (instance, data) => communityController.findCommunityInfo(instance, data),
+        });
+
+        res.status(HttpStatus.OK).json(response);
+      })
+      .get(this.routerPath('fetchAllCommunities'), ...guards, async (req, res) => {
+        const response = await this.communityNoValidate({
+          request: req,
+          execute: (instance) => communityController.fetchAllCommunities(instance),
+        });
+
+        res.status(HttpStatus.OK).json(response);
+      })
       .post(this.routerPath('create'), ...guards, async (req, res) => {
         logger.verbose('request received in createCommunity');
         logger.verbose('request body: ');
