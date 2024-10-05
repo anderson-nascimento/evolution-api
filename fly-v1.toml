@@ -17,9 +17,9 @@ primary_region = "sjc"
 
 [env]
   TZ="America/Sao_Paulo"
-  CONFIG_SESSION_PHONE_CLIENT="VipPague"
+  CONFIG_SESSION_PHONE_CLIENT="Comunalise"
   DATABASE_PROVIDER="postgresql"
-  CACHE_REDIS_ENABLED=false
+  CACHE_LOCAL_ENABLED=true
 
 [[services]]
   protocol = "tcp"
