@@ -1,5 +1,9 @@
 .git
-*Dockerfile*
-*docker-compose*
+.gitignore
+.env
+.dockerignore
 node_modules
 dist
+Dockerfile
+docker-compose*
+package-lock.json
