@@ -34,7 +34,9 @@ FROM node:20-alpine AS final
 RUN apk update && \
     apk add tzdata ffmpeg bash openssl
 
-ENV TZ=America/Sao_Paulo
+ENV TZ=America/Sao_Paulo \
+    DATABASE_PROVIDER=postgresql \
+    DATABASE_CONNECTION_URI='postgres://vippague_owner:QvXVf2LIb6TO@easy-painel.comunalise.com.br:5432/evolution?schema=public'
 
 WORKDIR /evolution
 
