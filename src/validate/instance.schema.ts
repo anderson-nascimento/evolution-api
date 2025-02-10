@@ -79,6 +79,7 @@ export const instanceSchema: JSONSchema7 = {
           'GROUPS_UPSERT',
           'GROUP_UPDATE',
           'GROUP_PARTICIPANTS_UPDATE',
+          'GROUP_JOIN_REQUEST',
           'CONNECTION_UPDATE',
           'LABELS_EDIT',
           'LABELS_ASSOCIATION',

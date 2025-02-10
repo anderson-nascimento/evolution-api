@@ -119,6 +119,8 @@ import makeWASocket, {
   MessageUserReceiptUpdate,
   MiscMessageGenerationOptions,
   ParticipantAction,
+  RequestJoinAction,
+  RequestJoinMethod,
   prepareWAMessageMedia,
   proto,
   UserFacingSocketConfig,
@@ -1521,7 +1523,7 @@ export class BaileysStartupService extends ChannelStartupService {
             instanceId: this.instanceId,
           };
 
-          this.sendDataWebhook(Events.MESSAGES_UPDATE, message);
+        this.sendDataWebhook(Events.MESSAGES_UPDATE, message);
 
           if (this.configService.get<Database>('DATABASE').SAVE_DATA.MESSAGE_UPDATE)
             await this.prismaRepository.messageUpdate.create({
@@ -1584,6 +1586,15 @@ export class BaileysStartupService extends ChannelStartupService {
       this.sendDataWebhook(Events.GROUP_PARTICIPANTS_UPDATE, participantsUpdate);
 
       this.updateGroupMetadataCache(participantsUpdate.id);
+    },
+
+    'group.join-request': (joinRequest: {
+      id: string;
+      participant: string;
+      action: RequestJoinAction;
+      method: RequestJoinMethod;
+    }) => {
+      this.sendDataWebhook(Events.GROUP_JOIN_REQUEST, joinRequest);
     },
   };
 
@@ -1747,6 +1758,11 @@ export class BaileysStartupService extends ChannelStartupService {
           if (events['group-participants.update']) {
             const payload = events['group-participants.update'];
             this.groupHandler['group-participants.update'](payload);
+          }
+
+          if (events['group.join-request']) {
+            const payload = events['group.join-request'];
+            this.groupHandler['group.join-request'](payload);
           }
         }
 
