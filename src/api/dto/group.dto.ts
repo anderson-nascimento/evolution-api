@@ -42,6 +42,11 @@ export class GroupSendInvite {
   numbers: string[];
 }
 
+export class GroupRequestUpdateParticipantDto extends GroupJid {
+  action: 'approve' | 'reject';
+  participants: string[];
+}
+
 export class GroupUpdateParticipantDto extends GroupJid {
   action: 'add' | 'remove' | 'promote' | 'demote';
   participants: string[];

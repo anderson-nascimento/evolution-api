@@ -11,6 +11,7 @@ import {
   GroupSubjectDto,
   GroupToggleEphemeralDto,
   GroupUpdateParticipantDto,
+  GroupRequestUpdateParticipantDto,
   GroupUpdateSettingDto,
 } from '@api/dto/group.dto';
 import { groupController } from '@api/server.module';
@@ -27,6 +28,7 @@ import {
   updateGroupSubjectSchema,
   updateParticipantsSchema,
   updateSettingsSchema,
+  acceptInviteJoinGroupSchema,
 } from '@validate/validate.schema';
 import { RequestHandler, Router } from 'express';
 
@@ -152,6 +154,16 @@ export class GroupRouter extends RouterBroker {
           schema: groupJidSchema,
           ClassRef: GroupJid,
           execute: (instance, data) => groupController.revokeInviteCode(instance, data),
+        });
+
+        res.status(HttpStatus.CREATED).json(response);
+      })
+      .post(this.routerPath('acceptInviteJoinGroup'), ...guards, async (req, res) => {
+        const response = await this.groupValidate<GroupRequestUpdateParticipantDto>({
+          request: req,
+          schema: acceptInviteJoinGroupSchema,
+          ClassRef: GroupRequestUpdateParticipantDto,
+          execute: (instance, data) => groupController.acceptInviteJoinGroup(instance, data),
         });
 
         res.status(HttpStatus.CREATED).json(response);
