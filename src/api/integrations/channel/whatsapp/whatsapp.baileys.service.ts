@@ -4405,6 +4405,15 @@ export class BaileysStartupService extends ChannelStartupService {
     }
   }
 
+  public async findInviteJoinGroup(id: GroupJid) {
+    try {
+      const inviteJoinList = await this.client.groupRequestParticipantsList(id.groupJid);
+      return { inviteJoinList: inviteJoinList };
+    } catch (error) {
+      throw new NotFoundException('No request join group', error.toString());
+    }
+  }
+
   public async acceptInviteJoinGroup(update: GroupRequestUpdateParticipantDto) {
     try {
       const participants = update.participants.map((p) => createJid(p));
@@ -4413,7 +4422,7 @@ export class BaileysStartupService extends ChannelStartupService {
         participants,
         update.action,
       );
-      return { updateParticipants: updateParticipants };
+      return { groupJid: update.groupJid, updateParticipants: updateParticipants, action: update.action };
     } catch (error) {
       throw new BadRequestException('Error updating participants', error.toString());
     }
