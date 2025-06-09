@@ -106,6 +106,31 @@ export const AcceptGroupInviteSchema: JSONSchema7 = {
   ...isNotEmpty('inviteCode'),
 };
 
+export const acceptInviteJoinGroupSchema: JSONSchema7 = {
+  $id: v4(),
+  type: 'object',
+  properties: {
+    groupJid: { type: 'string' },
+    action: {
+      type: 'string',
+      enum: ['approve', 'reject'],
+    },
+    participants: {
+      type: 'array',
+      minItems: 1,
+      uniqueItems: true,
+      items: {
+        type: 'string',
+        minLength: 10,
+        pattern: '\\d+',
+        description: '"participants" must be an array of numeric strings',
+      },
+    },
+  },
+  required: ['groupJid', 'action', 'participants'],
+  ...isNotEmpty('groupJid', 'action', 'participants'),
+};
+
 export const updateParticipantsSchema: JSONSchema7 = {
   $id: v4(),
   type: 'object',

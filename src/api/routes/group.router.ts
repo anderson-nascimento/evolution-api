@@ -11,6 +11,7 @@ import {
   GroupSubjectDto,
   GroupToggleEphemeralDto,
   GroupUpdateParticipantDto,
+  GroupRequestUpdateParticipantDto,
   GroupUpdateSettingDto,
 } from '@api/dto/group.dto';
 import { groupController } from '@api/server.module';
@@ -27,6 +28,7 @@ import {
   updateGroupSubjectSchema,
   updateParticipantsSchema,
   updateSettingsSchema,
+  acceptInviteJoinGroupSchema,
 } from '@validate/validate.schema';
 import { RequestHandler, Router } from 'express';
 
@@ -152,6 +154,29 @@ export class GroupRouter extends RouterBroker {
           schema: groupJidSchema,
           ClassRef: GroupJid,
           execute: (instance, data) => groupController.revokeInviteCode(instance, data),
+        });
+
+        res.status(HttpStatus.CREATED).json(response);
+      })
+      .get(this.routerPath('findInviteJoinGroup'), ...guards, async (req, res) => {
+        const response = await this.groupValidate<GroupJid>({
+          request: req,
+          schema: groupJidSchema,
+          ClassRef: GroupJid,
+          execute: (instance, data) => groupController.findInviteJoinGroup(instance, data),
+        });
+        if (response?.inviteJoinList && Array.isArray(response.inviteJoinList) && response.inviteJoinList.length === 0) {
+          res.status(HttpStatus.NOT_FOUND).json({ message: 'Not found request to join the group'});
+        } else {
+          res.status(HttpStatus.OK).json(response);
+        }
+      })
+      .post(this.routerPath('acceptInviteJoinGroup'), ...guards, async (req, res) => {
+        const response = await this.groupValidate<GroupRequestUpdateParticipantDto>({
+          request: req,
+          schema: acceptInviteJoinGroupSchema,
+          ClassRef: GroupRequestUpdateParticipantDto,
+          execute: (instance, data) => groupController.acceptInviteJoinGroup(instance, data),
         });
 
         res.status(HttpStatus.CREATED).json(response);

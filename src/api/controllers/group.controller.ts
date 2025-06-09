@@ -10,6 +10,7 @@ import {
   GroupSubjectDto,
   GroupToggleEphemeralDto,
   GroupUpdateParticipantDto,
+  GroupRequestUpdateParticipantDto,
   GroupUpdateSettingDto,
 } from '@api/dto/group.dto';
 import { InstanceDto } from '@api/dto/instance.dto';
@@ -64,6 +65,14 @@ export class GroupController {
 
   public async findParticipants(instance: InstanceDto, groupJid: GroupJid) {
     return await this.waMonitor.waInstances[instance.instanceName].findParticipants(groupJid);
+  }
+
+  public async findInviteJoinGroup(instance: InstanceDto, groupJid: GroupJid) {
+    return await this.waMonitor.waInstances[instance.instanceName].findInviteJoinGroup(groupJid);
+  }
+
+  public async acceptInviteJoinGroup(instance: InstanceDto, update: GroupRequestUpdateParticipantDto) {
+    return await this.waMonitor.waInstances[instance.instanceName].acceptInviteJoinGroup(update);
   }
 
   public async updateGParticipate(instance: InstanceDto, update: GroupUpdateParticipantDto) {

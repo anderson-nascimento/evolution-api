@@ -33,6 +33,7 @@ import {
   GroupSubjectDto,
   GroupToggleEphemeralDto,
   GroupUpdateParticipantDto,
+  GroupRequestUpdateParticipantDto,
   GroupUpdateSettingDto,
 } from '@api/dto/group.dto';
 import { InstanceDto, SetPresenceDto } from '@api/dto/instance.dto';
@@ -4401,6 +4402,29 @@ export class BaileysStartupService extends ChannelStartupService {
     } catch (error) {
       console.error(error);
       throw new NotFoundException('No participants', error.toString());
+    }
+  }
+
+  public async findInviteJoinGroup(id: GroupJid) {
+    try {
+      const inviteJoinList = await this.client.groupRequestParticipantsList(id.groupJid);
+      return { inviteJoinList: inviteJoinList };
+    } catch (error) {
+      throw new NotFoundException('No request join group', error.toString());
+    }
+  }
+
+  public async acceptInviteJoinGroup(update: GroupRequestUpdateParticipantDto) {
+    try {
+      const participants = update.participants.map((p) => createJid(p));
+      const updateParticipants = await this.client.groupRequestParticipantsUpdate(
+        update.groupJid,
+        participants,
+        update.action,
+      );
+      return { groupJid: update.groupJid, updateParticipants: updateParticipants, action: update.action };
+    } catch (error) {
+      throw new BadRequestException('Error updating participants', error.toString());
     }
   }
 
