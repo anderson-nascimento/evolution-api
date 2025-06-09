@@ -35,6 +35,7 @@ RUN apk update && \
     apk add tzdata ffmpeg bash openssl
 
 ENV TZ=America/Sao_Paulo
+
 ENV LOG_LEVEL=ERROR,WARN,INFO,LOG,DARK,WEBHOOKS,WEBSOCKET,DEBUG
 ENV LOG_COLOR=true
 
