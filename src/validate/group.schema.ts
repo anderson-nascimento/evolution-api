@@ -170,6 +170,34 @@ export const updateSettingsSchema: JSONSchema7 = {
   ...isNotEmpty('groupJid', 'action'),
 };
 
+export const memberAddModeSchema: JSONSchema7 = {
+  $id: v4(),
+  type: 'object',
+  properties: {
+    groupJid: { type: 'string' },
+    action: {
+      type: 'string',
+      enum: ['admin_add', 'all_member_add'],
+    },
+  },
+  required: ['groupJid', 'action'],
+  ...isNotEmpty('groupJid', 'action'),
+};
+
+export const joinApprovalModeSchema: JSONSchema7 = {
+  $id: v4(),
+  type: 'object',
+  properties: {
+    groupJid: { type: 'string' },
+    action: {
+      type: 'string',
+      enum: ['on', 'off'],
+    },
+  },
+  required: ['groupJid', 'action'],
+  ...isNotEmpty('groupJid', 'action'),
+};
+
 export const toggleEphemeralSchema: JSONSchema7 = {
   $id: v4(),
   type: 'object',

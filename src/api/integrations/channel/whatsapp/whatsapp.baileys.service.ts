@@ -35,6 +35,8 @@ import {
   GroupUpdateParticipantDto,
   GroupRequestUpdateParticipantDto,
   GroupUpdateSettingDto,
+  GroupMemberAddModeDto,
+  GroupJoinApprovalModeDto,
 } from '@api/dto/group.dto';
 import { InstanceDto, SetPresenceDto } from '@api/dto/instance.dto';
 import { HandleLabelDto, LabelDto } from '@api/dto/label.dto';
@@ -4266,6 +4268,8 @@ export class BaileysStartupService extends ChannelStartupService {
         descId: group.descId,
         restrict: group.restrict,
         announce: group.announce,
+        memberAddMode: group.memberAddMode,
+        joinApprovalMode: group.joinApprovalMode,
         isCommunity: group.isCommunity,
         participants: group.participants,
         isCommunityAnnounce: group.isCommunityAnnounce,
@@ -4298,6 +4302,8 @@ export class BaileysStartupService extends ChannelStartupService {
         descId: group.descId,
         restrict: group.restrict,
         announce: group.announce,
+        memberAddMode: group.memberAddMode,
+        joinApprovalMode: group.joinApprovalMode,
         isCommunity: group.isCommunity,
         isCommunityAnnounce: group.isCommunityAnnounce,
         linkedParent: group.linkedParent,
@@ -4448,6 +4454,26 @@ export class BaileysStartupService extends ChannelStartupService {
       return { updateSetting: updateSetting };
     } catch (error) {
       throw new BadRequestException('Error updating setting', error.toString());
+    }
+  }
+
+  public async memberAddMode(update: GroupMemberAddModeDto) {
+    try {
+      const memberAddMode = await this.client.groupMemberAddMode(update.groupJid, update.action);
+      console.log('Member add mode:', memberAddMode);
+      return { memberAddMode: memberAddMode };
+    } catch (error) {
+      throw new BadRequestException('Error member add mode', error.toString());
+    }
+  }
+
+  public async joinApprovalMode(update: GroupJoinApprovalModeDto) {
+    try {
+      const joinApprovalMode = await this.client.groupJoinApprovalMode(update.groupJid, update.action);
+      console.log('Join approval mode:', joinApprovalMode);
+      return { joinApprovalMode: joinApprovalMode };
+    } catch (error) {
+      throw new BadRequestException('Error join approval mode', error.toString());
     }
   }
 
