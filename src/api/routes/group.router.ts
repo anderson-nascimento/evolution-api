@@ -6,33 +6,33 @@ import {
   GroupDescriptionDto,
   GroupInvite,
   GroupJid,
+  GroupJoinApprovalModeDto,
+  GroupMemberAddModeDto,
   GroupPictureDto,
+  GroupRequestUpdateParticipantDto,
   GroupSendInvite,
   GroupSubjectDto,
   GroupToggleEphemeralDto,
   GroupUpdateParticipantDto,
-  GroupRequestUpdateParticipantDto,
   GroupUpdateSettingDto,
-  GroupJoinApprovalModeDto,
-  GroupMemberAddModeDto,
 } from '@api/dto/group.dto';
 import { groupController } from '@api/server.module';
 import {
   AcceptGroupInviteSchema,
+  acceptInviteJoinGroupSchema,
   createGroupSchema,
   getParticipantsSchema,
   groupInviteSchema,
   groupJidSchema,
   groupSendInviteSchema,
+  joinApprovalModeSchema,
+  memberAddModeSchema,
   toggleEphemeralSchema,
   updateGroupDescriptionSchema,
   updateGroupPictureSchema,
   updateGroupSubjectSchema,
   updateParticipantsSchema,
   updateSettingsSchema,
-  acceptInviteJoinGroupSchema,
-  joinApprovalModeSchema,
-  memberAddModeSchema,
 } from '@validate/validate.schema';
 import { RequestHandler, Router } from 'express';
 
@@ -169,8 +169,12 @@ export class GroupRouter extends RouterBroker {
           ClassRef: GroupJid,
           execute: (instance, data) => groupController.findInviteJoinGroup(instance, data),
         });
-        if (response?.inviteJoinList && Array.isArray(response.inviteJoinList) && response.inviteJoinList.length === 0) {
-          res.status(HttpStatus.NOT_FOUND).json({ message: 'Not found request to join the group'});
+        if (
+          response?.inviteJoinList &&
+          Array.isArray(response.inviteJoinList) &&
+          response.inviteJoinList.length === 0
+        ) {
+          res.status(HttpStatus.NOT_FOUND).json({ message: 'Not found request to join the group' });
         } else {
           res.status(HttpStatus.OK).json(response);
         }

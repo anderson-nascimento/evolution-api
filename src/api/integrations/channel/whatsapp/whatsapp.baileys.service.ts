@@ -28,15 +28,15 @@ import {
   GroupDescriptionDto,
   GroupInvite,
   GroupJid,
+  GroupJoinApprovalModeDto,
+  GroupMemberAddModeDto,
   GroupPictureDto,
+  GroupRequestUpdateParticipantDto,
   GroupSendInvite,
   GroupSubjectDto,
   GroupToggleEphemeralDto,
   GroupUpdateParticipantDto,
-  GroupRequestUpdateParticipantDto,
   GroupUpdateSettingDto,
-  GroupMemberAddModeDto,
-  GroupJoinApprovalModeDto,
 } from '@api/dto/group.dto';
 import { InstanceDto, SetPresenceDto } from '@api/dto/instance.dto';
 import { HandleLabelDto, LabelDto } from '@api/dto/label.dto';
@@ -122,10 +122,10 @@ import makeWASocket, {
   MessageUserReceiptUpdate,
   MiscMessageGenerationOptions,
   ParticipantAction,
-  RequestJoinAction,
-  RequestJoinMethod,
   prepareWAMessageMedia,
   proto,
+  RequestJoinAction,
+  RequestJoinMethod,
   UserFacingSocketConfig,
   WABrowserDescription,
   WAMediaUpload,
@@ -1526,7 +1526,7 @@ export class BaileysStartupService extends ChannelStartupService {
             instanceId: this.instanceId,
           };
 
-        this.sendDataWebhook(Events.MESSAGES_UPDATE, message);
+          this.sendDataWebhook(Events.MESSAGES_UPDATE, message);
 
           if (this.configService.get<Database>('DATABASE').SAVE_DATA.MESSAGE_UPDATE)
             await this.prismaRepository.messageUpdate.create({
