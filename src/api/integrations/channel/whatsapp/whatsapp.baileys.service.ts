@@ -28,12 +28,14 @@ import {
   GroupDescriptionDto,
   GroupInvite,
   GroupJid,
+  GroupJoinApprovalModeDto,
+  GroupMemberAddModeDto,
   GroupPictureDto,
+  GroupRequestUpdateParticipantDto,
   GroupSendInvite,
   GroupSubjectDto,
   GroupToggleEphemeralDto,
   GroupUpdateParticipantDto,
-  GroupRequestUpdateParticipantDto,
   GroupUpdateSettingDto,
 } from '@api/dto/group.dto';
 import { InstanceDto, SetPresenceDto } from '@api/dto/instance.dto';
@@ -120,10 +122,10 @@ import makeWASocket, {
   MessageUserReceiptUpdate,
   MiscMessageGenerationOptions,
   ParticipantAction,
-  RequestJoinAction,
-  RequestJoinMethod,
   prepareWAMessageMedia,
   proto,
+  RequestJoinAction,
+  RequestJoinMethod,
   UserFacingSocketConfig,
   WABrowserDescription,
   WAMediaUpload,
@@ -1524,7 +1526,7 @@ export class BaileysStartupService extends ChannelStartupService {
             instanceId: this.instanceId,
           };
 
-        this.sendDataWebhook(Events.MESSAGES_UPDATE, message);
+          this.sendDataWebhook(Events.MESSAGES_UPDATE, message);
 
           if (this.configService.get<Database>('DATABASE').SAVE_DATA.MESSAGE_UPDATE)
             await this.prismaRepository.messageUpdate.create({
@@ -4266,6 +4268,8 @@ export class BaileysStartupService extends ChannelStartupService {
         descId: group.descId,
         restrict: group.restrict,
         announce: group.announce,
+        memberAddMode: group.memberAddMode,
+        joinApprovalMode: group.joinApprovalMode,
         isCommunity: group.isCommunity,
         participants: group.participants,
         isCommunityAnnounce: group.isCommunityAnnounce,
@@ -4298,6 +4302,8 @@ export class BaileysStartupService extends ChannelStartupService {
         descId: group.descId,
         restrict: group.restrict,
         announce: group.announce,
+        memberAddMode: group.memberAddMode,
+        joinApprovalMode: group.joinApprovalMode,
         isCommunity: group.isCommunity,
         isCommunityAnnounce: group.isCommunityAnnounce,
         linkedParent: group.linkedParent,
@@ -4448,6 +4454,26 @@ export class BaileysStartupService extends ChannelStartupService {
       return { updateSetting: updateSetting };
     } catch (error) {
       throw new BadRequestException('Error updating setting', error.toString());
+    }
+  }
+
+  public async memberAddMode(update: GroupMemberAddModeDto) {
+    try {
+      const memberAddMode = await this.client.groupMemberAddMode(update.groupJid, update.action);
+      console.log('Member add mode:', memberAddMode);
+      return { memberAddMode: memberAddMode };
+    } catch (error) {
+      throw new BadRequestException('Error member add mode', error.toString());
+    }
+  }
+
+  public async joinApprovalMode(update: GroupJoinApprovalModeDto) {
+    try {
+      const joinApprovalMode = await this.client.groupJoinApprovalMode(update.groupJid, update.action);
+      console.log('Join approval mode:', joinApprovalMode);
+      return { joinApprovalMode: joinApprovalMode };
+    } catch (error) {
+      throw new BadRequestException('Error join approval mode', error.toString());
     }
   }
 
