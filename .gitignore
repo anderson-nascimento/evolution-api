@@ -48,3 +48,5 @@ lerna-debug.log*
 /prisma/migrations/*
 /docker-compose.yaml
 /docker-compose.dev.yaml
+
+package-lock.json
